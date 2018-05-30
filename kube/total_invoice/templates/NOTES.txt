@@ -2,7 +2,7 @@ To prepare the deployment
 
 cd invoices_svc
 npm install
-docker build . -t invoices_svc:v2
+docker build . -t invoices_svc:v1
 
 cd ../expected_date_svc
 npm install

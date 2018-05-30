@@ -1,0 +1,58 @@
+{{- $service_name := "invoices-svc" }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+{{ include "total_invoice.std.labels" $context | indent 4 }}
+  name: {{ $service_name }}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+{{ include "total_invoice.std.labels" $context | indent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+{{ include "total_invoice.std.labels" $context | indent 8 }}
+    spec:
+      containers:
+      - image: invoices_svc:v2
+        imagePullPolicy: Always
+        name: {{ $service_name }}
+        env:
+          - name: EXPECTED_DATE_URI
+            value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+{{ include "total_invoice.std.labels" $context | indent 4 }}
+  name: {{ $service_name }}
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  {{ $service_name }}_mapping
+      prefix: /invoices/
+      rewrite: /api/invoices/
+      service: {{ $service_name }}
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+{{ include "total_invoice.std.labels" $context | indent 4 }}

@@ -1,0 +1,13 @@
+To prepare the deployment
+
+cd invoices_svc
+npm install
+docker build . -t invoices_svc:v2
+
+cd ../expected_date_svc
+npm install
+
+
+The default Kubernetes namespace to deploy into is "total_invoice". 
+If a different namespace is desired, override the "namespace" value 
+(pass --set 'namespace=other_namespace' to helm install).

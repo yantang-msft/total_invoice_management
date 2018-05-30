@@ -6,6 +6,7 @@ docker build . -t invoices_svc:v2
 
 cd ../expected_date_svc
 npm install
+docker buildd . -t expected_date_svc:v1
 
 
 The default Kubernetes namespace to deploy into is "total_invoice". 

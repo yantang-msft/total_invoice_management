@@ -1,4 +1,5 @@
 {{- $service_name := "invoices-svc" }}
+{{- $context := (dict "service_name" "Values" .Values "Release" .Release) }}
 
 ---
 apiVersion: apps/v1
@@ -7,6 +8,7 @@ metadata:
   labels:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
   name: {{ $service_name }}
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: 3
   selector:
@@ -23,7 +25,7 @@ spec:
 {{ include "total_invoice.std.labels" $context | indent 8 }}
     spec:
       containers:
-      - image: invoices_svc:v2
+      - image: invoices_svc:v1
         imagePullPolicy: Always
         name: {{ $service_name }}
         env:
@@ -40,6 +42,7 @@ metadata:
   labels:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
   name: {{ $service_name }}
+  namespace: {{ .Values.namespace }}
   annotations:
     getambassador.io/config: |
       ---

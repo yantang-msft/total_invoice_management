@@ -1,14 +1,20 @@
 To prepare the deployment
 
-cd invoices_svc
+cd <REPO ROOT>/invoices_svc
 npm install
 docker build . -t invoices_svc:v1
 
 cd ../expected_date_svc
 npm install
-docker buildd . -t expected_date_svc:v1
+docker build . -t expected_date_svc:v1
 
+cd ../auth_svc
+npm install
+docker build . -t auth_svc:v1
 
 The default Kubernetes namespace to deploy into is "total_invoice". 
 If a different namespace is desired, override the "namespace" value 
 (pass --set 'namespace=other_namespace' to helm install).
+
+cd ../kube
+helm install total_invoice --name total_invoice_rel 

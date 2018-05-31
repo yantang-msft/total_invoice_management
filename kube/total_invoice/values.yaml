@@ -4,3 +4,7 @@
 
 replicaCount: 1
 namespace: total_invoice
+
+# This should really be a secret, but for the sake of keeping the example very simple
+# we are going to just use an ordinary value for now.
+auth_token: letmeinpleasekthxbye

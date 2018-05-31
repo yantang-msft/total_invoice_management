@@ -1,4 +1,4 @@
 auth_svc/node_modules/
 expected_date_svc/node_modules/
 invoices_svc/node_modules/
-package-lock.json
+**/package-lock.json

@@ -1,5 +1,5 @@
 {{- $service_name := "invoices-svc" }}
-{{- $context := (dict "service_name" "Values" .Values "Release" .Release) }}
+{{- $context := (dict "service_name" $service_name "Values" .Values "Release" .Release) }}
 
 ---
 apiVersion: apps/v1

@@ -12,9 +12,9 @@ cd ../auth_svc
 npm install
 docker build . -t auth_svc:v1
 
-The default Kubernetes namespace to deploy into is "total_invoice". 
+The default Kubernetes namespace to deploy into is "total-invoice". 
 If a different namespace is desired, override the "namespace" value 
-(pass --set 'namespace=other_namespace' to helm install).
+(pass --set 'namespace=other-namespace' to helm install).
 
 cd ../kube
-helm install total_invoice --name total_invoice_rel 
+helm install total_invoice --name total-invoice-rel 

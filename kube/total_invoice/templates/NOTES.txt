@@ -1,5 +1,8 @@
 To prepare the deployment
 
+If using minikube, switch to the built-in Docker daemon:
+eval $(minikube docker-env)
+
 cd <REPO ROOT>/invoices_svc
 npm install
 docker build . -t invoices_svc:v1
@@ -18,3 +21,10 @@ If a different namespace is desired, override the "namespace" value
 
 cd ../kube
 helm install total_invoice --name total-invoice-rel 
+
+To learn what the entry URL is
+ minikube service ambassador-svc --url --namespace total-invoice
+
+To delete the deployment
+helm del --purge total-invoice-rel
+

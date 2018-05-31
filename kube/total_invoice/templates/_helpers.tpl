@@ -32,7 +32,7 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{- define "total_invoice.std.labels" -}}
-app: total_invoice
+app: total-invoice
 component: {{ .service_name }}
 release: {{ .Release.Name }}
 {{- end }}

@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - image: {{ .Values.expected_date_svc_image }}
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: {{ $service_name }}
         ports:
         - containerPort: 8080

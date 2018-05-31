@@ -25,7 +25,7 @@ spec:
 {{ include "total_invoice.std.labels" $context | indent 8 }}
     spec:
       containers:
-      - image: auth_svc:v1
+      - image: {{ .Values.auth_svc_image }}
         imagePullPolicy: Always
         name: {{ $service_name }}
         env:

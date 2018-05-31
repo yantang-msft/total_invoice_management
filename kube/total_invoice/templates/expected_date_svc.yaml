@@ -25,7 +25,7 @@ spec:
 {{ include "total_invoice.std.labels" $context | indent 8 }}
     spec:
       containers:
-      - image: expected_date_svc:v1
+      - image: {{ .Values.expected_date_svc_image }}
         imagePullPolicy: Always
         name: {{ $service_name }}
         ports:

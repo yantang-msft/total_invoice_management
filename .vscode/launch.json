@@ -12,7 +12,8 @@
             "protocol": "inspector",
             "env": {
                 "PORT": "3007"
-            }
+            },
+            "console": "integratedTerminal"
         }
     ]
 }

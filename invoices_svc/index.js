@@ -1,21 +1,11 @@
 const express = require("express")
 const request = require("request-promise")
-const winston = require("winston")
+const expressWinston = require("express-winston")
+const logging = require('../logging')
 
-const app = express()
-
-var logger = new winston.Logger({
-  transports: [
-    new winston.transports.Console({
-      level: 'debug',
-      timestamp: true,
-      json: true,
-      stringify: true,
-      stderrLevels: [] // Output everything to stdout
-    })
-  ]
-});
-logger.emitErrs = false; // Do not emit error events from logger infrastructure
+const app = express();
+const router = express.Router();
+const logger = logging.TimLogger();
 
 const addExpectedDate = async invoice => {
   try {
@@ -33,16 +23,10 @@ const addExpectedDate = async invoice => {
   }
 }
 
-app.get("/api/invoices/:id", async (req, res, next) => {
+router.get("/api/invoices/:id", async (req, res, next) => {
   try {
     const id = parseInt(req.params.id)
     if (isNaN(id)) {
-      logger.debug('Request failure', {
-        status: '400 Bad Request',
-        invoice_id: req.params.id,
-        details: 'Invoice id is invalid'
-      })
-
       res.status(400).send({error: 'Invoice id is invalid'})
       return
     }
@@ -55,25 +39,25 @@ app.get("/api/invoices/:id", async (req, res, next) => {
       ccy: "GBP"
     })
 
-    logger.debug('Request success', {
-      status: '200 OK',
-      invoice_id: req.params.id,
-      invoice: invoice
-    })
-
     res.json(invoice)
   } catch (error) {
-    logger.warn('Unexpected error occurred while processing request for invoice', {
-      status: '500 Internal Server Error',
-      invoice_id: req.params.id,
-      error: error
-    })
-
     next(error)
   }
 })
 
 const port = process.env.PORT || 8080
+
+app.use(expressWinston.logger({
+  winstonInstance: logger,
+  level: logging.loggingLevel,
+  colorize: false
+}));
+
+app.use(router);
+
+app.use(expressWinston.errorLogger({
+  winstonInstance: logger
+}));
 
 app.listen(port, () => {
   logger.info(`invoices_svc listening on ${port}`, {port: port})

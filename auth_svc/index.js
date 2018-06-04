@@ -1,8 +1,12 @@
 const express = require("express")
+const expressWinston = require("express-winston")
+const logging = require('../logging')
 
-const app = express()
+const app = express();
+const router = express.Router();
+const logger = logging.TimLogger();
 
-app.use((req, res) => {
+router.use((req, res) => {
   if (req.get('authorization') === process.env.TOKEN) {
     res.json({
       ok: true
@@ -15,6 +19,18 @@ app.use((req, res) => {
 })
 
 const port = process.env.PORT || 8080
+
+app.use(expressWinston.logger({
+  winstonInstance: logger,
+  level: logging.loggingLevel,
+  colorize: false
+}));
+
+app.use(router);
+
+app.use(expressWinston.errorLogger({
+  winstonInstance: logger
+}));
 
 app.listen(port, () => {
   console.log(`auth_svc listening on ${port}`)

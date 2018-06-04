@@ -1,7 +1,7 @@
 # total_invoice_managment
-## a Kubernetes tutorial
+### *a Kubernetes tutorial*
 
-Original repo accompanies a [blog post](https://medium.com/@MostlyHarmlessD/getting-started-with-microservices-and-kubernetes-76354312b556). I have modified it to use Helm for deployment.
+Original repo accompanies a [blog post](https://medium.com/@MostlyHarmlessD/getting-started-with-microservices-and-kubernetes-76354312b556). This repo contains a modified version that uses Helm for deployment.
 
 ## Configure deployment environment
 
@@ -29,14 +29,18 @@ The default Kubernetes namespace to deploy into is `total-invoice`.
 If a different namespace is desired, override the "namespace" value 
 (pass `--set 'namespace=other-namespace'` to `helm install`).
 
-To learn what the entry URL is:
-
+## To learn what the entry URL is
 ```
  minikube service ambassador-svc --url --namespace total-invoice
 ```
 
-To delete the deployment
+## To interrogate the invoices service
+```
+curl http://<AMBASSADOR SERVICE URL>/invoices/14 -H 'authorization: letmeinpleasekthxbye'
+```
+(replace ambassador service URL as necessary).
 
+## To delete the deployment
 ```
 helm del --purge total-invoice-rel
 ```

@@ -1,26 +1,4 @@
-To prepare the deployment
-
-If using minikube, switch to the built-in Docker daemon:
-eval $(minikube docker-env)
-
-cd <REPO ROOT>/invoices_svc
-npm install
-docker build . -t invoices_svc:v1
-
-cd ../expected_date_svc
-npm install
-docker build . -t expected_date_svc:v1
-
-cd ../auth_svc
-npm install
-docker build . -t auth_svc:v1
-
-The default Kubernetes namespace to deploy into is "total-invoice". 
-If a different namespace is desired, override the "namespace" value 
-(pass --set 'namespace=other-namespace' to helm install).
-
-cd ../kube
-helm install total_invoice --name total-invoice-rel 
+Upon successful deployment:
 
 To learn what the entry URL is
  minikube service ambassador-svc --url --namespace total-invoice

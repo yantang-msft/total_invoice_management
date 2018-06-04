@@ -1,9 +1,13 @@
 const express = require("express")
 const moment = require("moment")
+const expressWinston = require("express-winston")
+const logging = require('../logging')
 
 const app = express()
+const router = express.Router();
+const logger = logging.TimLogger();
 
-app.get("/api/expected-date/:invoiceId", (req, res) => {
+router.get("/api/expected-date/:invoiceId", (req, res) => {
   const invoiceId = parseInt(req.params.invoiceId)
 
   // ¯\_(ツ)_/¯
@@ -18,6 +22,17 @@ app.get("/api/expected-date/:invoiceId", (req, res) => {
 })
 
 const port = process.env.PORT || 8080
+app.use(expressWinston.logger({
+  winstonInstance: logger,
+  level: logging.loggingLevel,
+  colorize: false
+}));
+
+app.use(router);
+
+app.use(expressWinston.errorLogger({
+  winstonInstance: logger
+}));
 
 app.listen(port, () => {
   console.log(`expected_date_svc listening on ${port}`)

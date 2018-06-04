@@ -14,17 +14,9 @@ eval $(minikube docker-env)
 ## Build Docker images
 
 ```
-cd <REPO ROOT>/invoices_svc
-npm install
-docker build . -t invoices_svc:v1
-
-cd ../expected_date_svc
-npm install
-docker build . -t expected_date_svc:v1
-
-cd ../auth_svc
-npm install
-docker build . -t auth_svc:v1
+docker build . -f invoices_svc/Dockerfile -t invoices_svc:v1
+docker build . -f expected_date_svc/Dockerfile -t expected_date_svc:v1
+docker build . -f auth_svc/Dockerfile -t auth_svc:v1
 ```
 
 ## Deploy

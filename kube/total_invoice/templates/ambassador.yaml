@@ -52,7 +52,7 @@ metadata:
   labels:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replica_count }}
   selector:
     matchLabels:
 {{ include "total_invoice.std.labels" $context | indent 6 }}

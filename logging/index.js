@@ -2,7 +2,7 @@ const winston = require("winston")
 
 const loggingLevel = 'debug';
 
-function TimLogger() {
+function TimConsoleLogger() {
     let logger = new winston.Logger({
         transports: [
           new winston.transports.Console({
@@ -19,4 +19,4 @@ function TimLogger() {
 }
 
 module.exports.loggingLevel = loggingLevel;
-module.exports.TimLogger = TimLogger;
+module.exports.TimConsoleLogger = TimConsoleLogger;

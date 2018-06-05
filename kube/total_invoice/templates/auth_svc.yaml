@@ -30,7 +30,10 @@ spec:
         name: {{ $service_name }}
         env:
         - name: TOKEN
-          value: {{ .Values.auth_token }}
+          valueFrom:
+            secretKeyRef:
+              name: total-invlice-secrets
+              key: appinsights_instrumentationkey
         ports:
         - containerPort: 8080
           name: http-api

@@ -36,3 +36,55 @@ app: total-invoice
 component: {{ .service_name }}
 release: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Define common, Kubernetes-related environment variables
+*/}}
+{{- define "total-invoice.k8s.envvars" -}}
+- name: SOURCE_CONTAINER_NAME
+  value: {{ .service_name }}
+- name: POD_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
+- name: NAMESPACE_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: POD_ID
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.uid
+{{- end }}
+
+{{- define "total_invoice.fluentdSidecar" -}}
+- name: fluentdsidecar
+  image: {{ .Values.fluentdsidecar_image }}
+  imagePullPolicy: IfNotPresent
+  env:
+    - name: INSTRUMENTATION_KEY
+      valueFrom:
+        secretKeyRef:
+          name: total-invoice-secrets
+          key: appinsights_instrumentationkey
+{{ include "total_invoice.k8s.envvars" . | indent 4 }}
+  volumeMounts:
+  - name: varlog
+    mountPath: /var/log
+  - name: varlibdockercontainers
+    mountPath: /var/lib/docker/containers
+    readOnly: true
+  - name: emptydir
+    mountPath: /var/fluentdsidecar
+{{- end }}
+
+{{- define "total_invoice.fluentdConsoleLogVolume" -}}
+- name: varlog
+  hostPath:
+    path: /var/log
+- name: varlibdockercontainers
+  hostPath:
+    path: /var/lib/docker/containers
+- name: emptydir
+  emptyDir: {}
+{{- end }}

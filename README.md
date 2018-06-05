@@ -1,7 +1,9 @@
 # total_invoice_managment
 ### *a Kubernetes tutorial*
 
-Original repo accompanies a [blog post](https://medium.com/@MostlyHarmlessD/getting-started-with-microservices-and-kubernetes-76354312b556). This repo contains a modified version that uses Helm for deployment.
+Original repo accompanies a [blog post](https://medium.com/@MostlyHarmlessD/getting-started-with-microservices-and-kubernetes-76354312b556). 
+This repo contains a modified version that uses Helm for deployment and sends diagnostic data to Application Insights.
+One should create an Application Insights resource and have its instrumentation key ready before attempting to deploy the app.
 
 ## Configure deployment environment
 
@@ -22,7 +24,7 @@ docker build . -f auth_svc/Dockerfile -t auth_svc:v1
 ## Deploy
 ```
 cd ../kube
-helm install total_invoice --name total-invoice-rel 
+helm install total_invoice --name total-invoice-rel  --set 'appinsights_instrumentationkey=<YOUR APP INSIGHS IKEY>'
 ```
 
 The default Kubernetes namespace to deploy into is `total-invoice`. 

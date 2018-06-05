@@ -4,7 +4,7 @@ const logging = require('../logging')
 
 const app = express();
 const router = express.Router();
-const logger = logging.TimLogger();
+const logger = logging.TimConsoleLogger();
 
 router.use((req, res) => {
   if (req.get('authorization') === process.env.TOKEN) {

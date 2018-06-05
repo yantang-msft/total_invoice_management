@@ -5,7 +5,7 @@ const logging = require('../logging')
 
 const app = express();
 const router = express.Router();
-const logger = logging.TimLogger();
+const logger = logging.TimConsoleLogger();
 
 const addExpectedDate = async invoice => {
   try {

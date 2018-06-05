@@ -34,6 +34,9 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+{{ include "total_invoice.fluentdSidecar" $context| indent 8 }}
+      volumes:
+{{ include "total_invoice.fluentdConsoleLogVolume" . | indent 6 }}
 
 ---
 apiVersion: v1

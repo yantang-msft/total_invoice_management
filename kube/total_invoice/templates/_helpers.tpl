@@ -40,7 +40,7 @@ release: {{ .Release.Name }}
 {{/*
 Define common, Kubernetes-related environment variables
 */}}
-{{- define "total-invoice.k8s.envvars" -}}
+{{- define "total_invoice.k8s.envvars" -}}
 - name: SOURCE_CONTAINER_NAME
   value: {{ .service_name }}
 - name: POD_NAME
@@ -68,6 +68,7 @@ Define common, Kubernetes-related environment variables
           name: total-invoice-secrets
           key: appinsights_instrumentationkey
 {{ include "total_invoice.k8s.envvars" . | indent 4 }}
+{{- if eq .Values.log_capture_mode "console" }}
   volumeMounts:
   - name: varlog
     mountPath: /var/log
@@ -76,6 +77,7 @@ Define common, Kubernetes-related environment variables
     readOnly: true
   - name: emptydir
     mountPath: /var/fluentdsidecar
+{{- end }}
 {{- end }}
 
 {{- define "total_invoice.fluentdConsoleLogVolume" -}}
@@ -87,4 +89,40 @@ Define common, Kubernetes-related environment variables
     path: /var/lib/docker/containers
 - name: emptydir
   emptyDir: {}
+{{- end }}
+
+{{- define "total_invoice.fluentdAuthorizationAssets" -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .service_name }}
+  namespace: {{ .Values.namespace }}
+rules:
+- apiGroups: [""]
+  resources:
+  - pods
+  - namespaces
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name:  {{ .service_name }}
+  namespace: {{ .Values.namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name:  {{ .service_name }}
+  namespace: {{ .Values.namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name:  {{ .service_name }}
+subjects:
+- kind: ServiceAccount
+  name:  {{ .service_name }}
+  namespace: {{ .Values.namespace }}
 {{- end }}

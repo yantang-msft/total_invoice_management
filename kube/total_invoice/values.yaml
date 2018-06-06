@@ -5,6 +5,10 @@
 replica_count: 1
 namespace: total-invoice
 
+# If set to "console", the logs will be captured from stdout/stderr
+# instead of assuming that the service will be pushing them using HTTP
+log_capture_mode: http
+
 # In production environment the auth token should not have a default value
 # (it should be passed via command-line parameter at deployment time)
 auth_token: letmeinpleasekthxbye

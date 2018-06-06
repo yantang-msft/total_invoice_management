@@ -23,7 +23,7 @@ docker build . -f auth_svc/Dockerfile -t auth_svc:v1
 
 ## Deploy
 ```
-cd ../kube
+cd ./kube
 helm install total_invoice --name total-invoice-rel  --set 'appinsights_instrumentationkey=<YOUR APP INSIGHS IKEY>'
 ```
 

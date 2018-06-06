@@ -32,7 +32,7 @@ spec:
         - name: TOKEN
           valueFrom:
             secretKeyRef:
-              name: total-invlice-secrets
+              name: total-invoice-secrets
               key: appinsights_instrumentationkey
         ports:
         - containerPort: 8080

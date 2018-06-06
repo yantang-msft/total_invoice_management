@@ -1,6 +1,7 @@
 {{- $service_name := "invoices-svc" }}
 {{- $context := (dict "service_name" $service_name "Values" .Values "Release" .Release) }}
 
+{{ include "total_invoice.fluentdAuthorizationAssets" $context }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,19 +25,18 @@ spec:
       labels:
 {{ include "total_invoice.std.labels" $context | indent 8 }}
     spec:
+      serviceAccountName: {{ $service_name }}
       containers:
       - image: {{ .Values.invoices_svc_image }}
         imagePullPolicy: IfNotPresent
         name: {{ $service_name }}
         env:
-          - name: EXPECTED_DATE_URI
-            value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
+        - name: EXPECTED_DATE_URI
+          value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
         ports:
         - containerPort: 8080
           protocol: TCP
-{{ include "total_invoice.fluentdSidecar" $context| indent 8 }}
-      volumes:
-{{ include "total_invoice.fluentdConsoleLogVolume" . | indent 6 }}
+{{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---
 apiVersion: v1

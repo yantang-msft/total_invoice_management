@@ -33,7 +33,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: total-invoice-secrets
-              key: appinsights_instrumentationkey
+              key: auth_token
         ports:
         - containerPort: 8080
           name: http-api

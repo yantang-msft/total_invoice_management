@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "winston": "^2.4.2"
+    "winston": "^2.4.2",
+    "winston-endpoint": "^1.0.1"
   }
 }

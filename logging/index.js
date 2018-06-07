@@ -1,45 +1,40 @@
 const winston = require("winston")
+const winstonEndpoint = require("winston-endpoint")
 
 const loggingLevel = 'debug';
 
 function TimConsoleLogger() {
-    let logger = new winston.Logger({
-      transports: [
-        consoleTransport()
-      ]
-    });
-    logger.level = loggingLevel;
-    logger.emitErrs = false; // Do not emit error events from logger infrastructure
-    return logger;
+  return logger( [consoleTransport()] );
 }
 
 function TimHttpLogger() {
-  let logger = new winston.Logger({
-    transports: [
-      httpTransport()
-    ]
-  });
-  logger.level = loggingLevel;
-  logger.emitErrs = false; // Do not emit error events from logger infrastructure
-  return logger;
+  return logger( [httpTransport()] );
 }
 
 function TimDebugLogger() {
+  return logger([
+    consoleTransport(),
+    httpTransport()
+  ]);
+}
+
+function logger(transports) {
   let logger = new winston.Logger({
-    transports: [
-      consoleTransport(),
-      httpTransport()
-    ]
+    transports: transports
   });
   logger.level = loggingLevel;
   logger.emitErrs = false; // Do not emit error events from logger infrastructure
+  logger.rewriters = [(level, msg, meta) => {
+    meta.timestamp = new Date().toISOString();
+    return meta;
+  }];
   return logger;
 }
 
 function consoleTransport() {
   return new winston.transports.Console({
     level: loggingLevel,
-    timestamp: true,
+    timestamp: false,
     json: true,
     stringify: true,
     stderrLevels: [] // Output everything to stdout
@@ -47,9 +42,10 @@ function consoleTransport() {
 }
 
 function httpTransport() {
-  return new winston.transports.Http({
-    port: 8887,
-    path: "/ApplicationInsightsHttpChannel"
+  return new winstonEndpoint({
+    url: "http://localhost:8887/ApplicationInsightsHttpChannel",
+    json: true,
+    level: loggingLevel
   });
 }
 

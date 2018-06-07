@@ -68,6 +68,7 @@ Define common, Kubernetes-related environment variables
           name: total-invoice-secrets
           key: appinsights_instrumentationkey
 {{ include "total_invoice.k8s.envvars" . | indent 4 }}
+{{ if eq .Values.log_capture_mode "console" }}
   volumeMounts:
   - name: varlog
     mountPath: /var/log
@@ -76,6 +77,7 @@ Define common, Kubernetes-related environment variables
     readOnly: true
   - name: emptydir
     mountPath: /var/fluentdsidecar
+{{- end }}
 {{- end }}
 
 {{- define "total_invoice.fluentdConsoleLogVolume" -}}

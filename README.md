@@ -13,6 +13,11 @@ eval $(minikube docker-env)
 ```
 (this affects the current shell only).
 
+Pull latest fluentd sidecar image for sending logs to Application Insights
+```
+docker pull atcdemo.azurecr.io/fluentdsidecar:latest
+```
+
 ## Build Docker images
 
 ```

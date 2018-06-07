@@ -15,9 +15,7 @@ const addExpectedDate = async invoice => {
 
     return Object.assign({}, invoice, { expectedDate })
   } catch (error) {
-    logger.warn('Failed to add expected date', {
-      error: error
-    });
+    logger.warn('Failed to add expected date', error);
 
     return invoice
   }

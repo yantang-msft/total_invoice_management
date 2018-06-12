@@ -1,6 +1,7 @@
 const http = require('http');
 const httpProxy = require('http-proxy');
 const logging = require('../logging');
+const ActivityId = require('../activity_id');
 
 const ambassadorUrl = process.env.AMBASSADOR_URI;
 const logger = logging.TimHttpLogger();

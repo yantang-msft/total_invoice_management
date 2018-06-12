@@ -1,0 +1,16 @@
+{
+  "name": "entry_svc",
+  "version": "1.0.0",
+  "description": "Entry point to the Total Invoice Management app, responsible for correlation id generation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http-proxy": "^1.17.0",
+    "winston": "^2.4.2",
+    "logging": "file:../logging"
+  }
+}

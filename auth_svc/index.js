@@ -7,7 +7,7 @@ const router = express.Router();
 const logger = logging.TimHttpLogger();
 
 router.use((req, res) => {
-  if (req.get('authorization') === process.env.TOKEN) {
+  if (req.header('authorization') === process.env.TOKEN) {
     res.json({
       ok: true
     })

@@ -33,7 +33,6 @@ spec:
         name: {{ $service_name }}
         ports:
         - containerPort: 8080
-          protocol: TCP
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---
@@ -47,7 +46,6 @@ metadata:
 spec:
   ports:
   - port: 80
-    protocol: TCP
     targetPort: 8080
   selector:
 {{ include "total_invoice.std.labels" $context | indent 4 }}

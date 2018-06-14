@@ -38,7 +38,6 @@ spec:
               key: auth_token
         ports:
         - containerPort: 8080
-          name: http-api
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---
@@ -63,4 +62,4 @@ spec:
   ports:
   - port: 3000
     name: {{ $service_name }}
-    targetPort: http-api
+    targetPort: 8080

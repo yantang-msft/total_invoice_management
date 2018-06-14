@@ -105,7 +105,6 @@ metadata:
   name: {{ $service_name }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
   ports:
   - name: {{ $service_name }}
     port: 80

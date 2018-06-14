@@ -1,8 +1,7 @@
-{{- $service_name := "invoices-svc" }}
+{{- $service_name := "entry-svc" }}
 {{- $context := (dict "service_name" $service_name "Values" .Values "Release" .Release) }}
 
 {{ include "total_invoice.fluentdAuthorizationAssets" $context }}
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,12 +27,12 @@ spec:
     spec:
       serviceAccountName: {{ $service_name }}
       containers:
-      - image: {{ .Values.invoices_svc_image }}
+      - image: {{ .Values.entry_svc_image }}
         imagePullPolicy: IfNotPresent
         name: {{ $service_name }}
         env:
-        - name: EXPECTED_DATE_URI
-          value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
+        - name: AMBASSADOR_URI
+          value: http://ambassador-svc.{{ .Values.namespace }}.svc.cluster.local
         ports:
         - containerPort: 8080
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
@@ -42,22 +41,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-{{ include "total_invoice.std.labels" $context | indent 4 }}
   name: {{ $service_name }}
   namespace: {{ .Values.namespace }}
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v0
-      kind:  Mapping
-      name:  {{ $service_name }}_mapping
-      prefix: /invoices/
-      rewrite: /api/invoices/
-      service: {{ $service_name }}
+  labels:
+{{ include "total_invoice.std.labels" $context | indent 4 }}
 spec:
-  ports:
-  - port: 80
-    targetPort: 8080
+  type: LoadBalancer
   selector:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
+  ports:
+  - port: 80
+    name: {{ $service_name }}
+    targetPort: 8080

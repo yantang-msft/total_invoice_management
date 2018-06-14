@@ -39,14 +39,14 @@ If a different namespace is desired, override the "namespace" value
 
 ## To learn what the entry URL is
 ```
- minikube service ambassador-svc --url --namespace total-invoice
+ minikube service entry-svc --url --namespace total-invoice
 ```
 
 ## To interrogate the invoices service
 ```
-curl http://<AMBASSADOR SERVICE URL>/invoices/14 -H 'authorization: letmeinpleasekthxbye'
+curl http://<ENTRY SERVICE URL>/invoices/14 -H 'authorization: letmeinpleasekthxbye'
 ```
-(replace ambassador service URL as necessary).
+(replace entry service URL as necessary).
 
 ## To delete the deployment
 ```

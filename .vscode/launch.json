@@ -11,7 +11,19 @@
             "program": "${workspaceFolder}/invoices_svc/index.js",
             "protocol": "inspector",
             "env": {
-                "PORT": "3007"
+                "PORT": "1201"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch entry_svc",
+            "program": "${workspaceFolder}/entry_svc/index.js",
+            "protocol": "inspector",
+            "env": {
+                "PORT": "1202",
+                "AMBASSADOR_URI": "http://localhost:1201"
             },
             "console": "integratedTerminal"
         }

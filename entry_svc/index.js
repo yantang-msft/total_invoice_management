@@ -19,8 +19,7 @@ else {
         // (we do not trust external clients to set request IDs properly)
         let activityId = new ActivityId();
         clientReq.setHeader("Request-Id", activityId.id);
-        logger.info(`Added request ID ${activityId.id} to request '${clientReq.method} ${clientReq.url}'`); 
-        // {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms
+        logger.info(`Added request ID ${activityId.id} to request '${clientReq.method} ${clientReq.path}'`); 
     });
 
     proxy.on('proxyRes', function (proxyRes, req, res) {

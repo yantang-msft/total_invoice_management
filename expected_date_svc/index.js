@@ -5,7 +5,7 @@ const logging = require('../logging')
 
 const app = express()
 const router = express.Router();
-const logger = logging.TimHttpLogger();
+const logger = logging.TimDebugLogger();
 
 router.get("/api/expected-date/:invoiceId", (req, res) => {
   const invoiceId = parseInt(req.params.invoiceId)
@@ -35,5 +35,5 @@ app.use(expressWinston.errorLogger({
 }));
 
 app.listen(port, () => {
-  console.log(`expected_date_svc listening on ${port}`)
+  logger.info(`expected_date_svc listening on ${port}`, {port:port})
 })

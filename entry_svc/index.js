@@ -1,11 +1,12 @@
 const http = require('http');
 const httpProxy = require('http-proxy');
+const stream_util = require('mississippi');
 const logging = require('../logging');
 const ActivityId = require('../activity_id');
 
-const ambassadorUrl = process.env.AMBASSADOR_URI;
-const logger = logging.TimHttpLogger();
+const logger = logging.TimDebugLogger();
 
+let ambassadorUrl = process.env.AMBASSADOR_URI;
 if (!ambassadorUrl) {
     logger.error("Upstream service (ambassador) URI not set");
     process.exitCode = 1;
@@ -18,6 +19,16 @@ else {
         // (we do not trust external clients to set request IDs properly)
         let activityId = new ActivityId();
         clientReq.setHeader("Request-Id", activityId.id);
+        logger.info(`Added request ID ${activityId.id} to request '${clientReq.method} ${clientReq.url}'`); 
+        // {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms
+    });
+
+    proxy.on('proxyRes', function (proxyRes, req, res) {
+      let bodyHandler = stream_util.concat((data) => {
+        logger.info(`Response for request ${proxyRes.headers["Request-Id"]}: status ${proxyRes.statusCode} ${data}`);
+      });
+      
+      stream_util.pipe(proxyRes, bodyHandler, (error) => {});
     });
 
     const server = http.createServer(function(req, res) {

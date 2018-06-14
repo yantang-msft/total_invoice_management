@@ -4,7 +4,7 @@ const logging = require('../logging')
 
 const app = express();
 const router = express.Router();
-const logger = logging.TimHttpLogger();
+const logger = logging.TimDebugLogger();
 
 router.use((req, res) => {
   if (req.header('authorization') === process.env.TOKEN) {
@@ -33,5 +33,5 @@ app.use(expressWinston.errorLogger({
 }));
 
 app.listen(port, () => {
-  console.log(`auth_svc listening on ${port}`)
+  logger.invo(`auth_svc listening on ${port}`, {port:port});
 })

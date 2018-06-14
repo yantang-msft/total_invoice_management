@@ -5,11 +5,15 @@ const logging = require('../logging')
 
 const app = express();
 const router = express.Router();
-const logger = logging.TimHttpLogger();
+const logger = logging.TimDebugLogger();
+let expectedDateUri = process.env.EXPECTED_DATE_URI;
+if (expectedDateUri && expectedDateUri.endsWith('/')) {
+  expectedDateUri = expectedDateUri.substr(0, expectedDateUri.length - 1);
+}
 
 const addExpectedDate = async invoice => {
   try {
-    const { expectedDate } = await request(`${process.env.EXPECTED_DATE_URI}/api/expected-date/${invoice.id}`, {
+    const { expectedDate } = await request(`${expectedDateUri}/api/expected-date/${invoice.id}`, {
       json: true
     })
 

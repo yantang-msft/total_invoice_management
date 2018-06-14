@@ -9,10 +9,10 @@ class ActivityId {
       this.sequenceNo_ = 0
 
       if (!parent_id) {
-          this.id_ = generateRootId();
+          this.id_ = this.generateRootId();
       }
       else {
-          this.id_ = generateParentedId(parent_id);
+          this.id_ = this.generateParentedId(parent_id);
       }
   }
 

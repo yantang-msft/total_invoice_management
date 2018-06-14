@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:10
 WORKDIR /usr/src/app
 
 COPY ./expected_date_svc/*.js ./expected_date_svc/package.json ./expected_date_svc/

@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:10
 WORKDIR /usr/src/app
 
 COPY ./auth_svc/*.js ./auth_svc/package.json ./auth_svc/

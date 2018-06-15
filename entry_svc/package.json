@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "activity_id": "file:../activity_id",
+    "activities": "file:../activities",
     "http-proxy": "^1.17.0",
     "logging": "file:../logging",
     "mississippi": "^3.0.0",

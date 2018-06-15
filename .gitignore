@@ -3,5 +3,5 @@ expected_date_svc/node_modules/
 invoices_svc/node_modules/
 logging/node_modules/
 entry_svc/node_modules/
-activity_id/node_modules/
+activities/node_modules/
 **/package-lock.json

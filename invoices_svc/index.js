@@ -25,21 +25,20 @@ const addExpectedDate = async (invoice, activityId) => {
     return Object.assign({}, invoice, { expectedDate })
   } 
   catch (error) {
-    logger.warn('Failed to add expected date', activityId.addContextProperties(error));
+    logger.warn('Failed to add expected date', activityId.addRequestIdProperties(error));
 
     return invoice
   }
 }
 
 router.get("/api/invoices/:id", async (req, res, next) => {
+  const activityId = activities.getRequestActivityId(req);
+
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
-    res.status(400).send({error: 'Invoice id is invalid'})
-    return
+    res.status(400).send(activityId.addRequestIdProperties({error: 'Invoice id is invalid'}));
+    return;
   }
-
-  const requestId = req.header(activities.RequestIdHeader);
-  const activityId = new activities.ActivityId(requestId);
 
   try {
     const invoice = await addExpectedDate({
@@ -53,16 +52,23 @@ router.get("/api/invoices/:id", async (req, res, next) => {
     res.json(invoice);
   } 
   catch (error) {
-    next(activityId.addContextProperties(error));
+    next(activityId.addRequestIdProperties(error));
   }
-})
+});
 
 const port = process.env.PORT || 8080
+
+const getRequestIdProperties = (req, _) => {
+  const activityId = activities.getRequestActivityId(req);
+  const requestIdProperties = activityId.addRequestIdProperties({});
+  return requestIdProperties;
+};
 
 app.use(expressWinston.logger({
   winstonInstance: logger,
   level: logging.loggingLevel,
-  colorize: false
+  colorize: false,
+  dynamicMeta: getRequestIdProperties
 }));
 
 app.use(router);

@@ -13,7 +13,7 @@ class ActivityId {
           this.id_ = this.generateRootId();
       }
       else {
-          this.id_ = this.generateParentedId(parentId);
+          [this.id_, this.parentId_] = this.generateParentedId(parentId);
       }
   }
 
@@ -41,15 +41,15 @@ class ActivityId {
         sanitizedParentId += ".";
     }
 
-    return sanitizedParentId + uuidv4().substr(0, 8) + "_";
+    return [sanitizedParentId + uuidv4().substr(0, 8) + "_", sanitizedParentId];
   }
 
   getChildId() {
     this.sequenceNo_++;
-    return `${this.id_}.${this.sequenceNo_}.`;
+    return `${this.id_}${this.sequenceNo_}.`;
   }
 
-  addContextProperties(record) {
+  addRequestIdProperties(record) {
     let context = {
       microsoft_traceId: this.rootId,
       microsoft_operationId: this.id_,
@@ -60,5 +60,20 @@ class ActivityId {
   }
 }
 
+const requestIdHeader = "request-id";
+
+function getRequestActivityId(req) {
+  if (req.requestActivityId) {
+    return req.requestActivityId;
+  }
+  else {
+    const requestId = req.header(requestIdHeader);
+    const activityId = new ActivityId(requestId);
+    req.requestActivityId = activityId;
+    return activityId;
+  }
+}
+
 exports.ActivityId = ActivityId;
-exports.RequestIdHeader = "request-id";
+exports.RequestIdHeader = requestIdHeader;
+exports.getRequestActivityId = getRequestActivityId;

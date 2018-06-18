@@ -41,5 +41,5 @@ app.use(expressWinston.errorLogger({
 }));
 
 app.listen(port, () => {
-  logger.invo(`auth_svc listening on ${port}`, {port:port});
+  logger.info(`auth_svc listening on ${port}`, {port:port});
 })

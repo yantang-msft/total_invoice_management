@@ -1,7 +1,8 @@
-const express = require("express")
-const moment = require("moment")
-const expressWinston = require("express-winston")
-const logging = require('../logging')
+const express = require("express");
+const moment = require("moment");
+const expressWinston = require("express-winston");
+const logging = require('../logging');
+const activities = require('../activities');
 
 const app = express()
 const router = express.Router();
@@ -21,11 +22,19 @@ router.get("/api/expected-date/:invoiceId", (req, res) => {
   })
 })
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8080;
+
+const getRequestIdProperties = (req, _) => {
+  const activityId = activities.getRequestActivityId(req);
+  const requestIdProperties = activityId.addRequestIdProperties({});
+  return requestIdProperties;
+};
+
 app.use(expressWinston.logger({
   winstonInstance: logger,
   level: logging.loggingLevel,
-  colorize: false
+  colorize: false,
+  dynamicMeta: getRequestIdProperties
 }));
 
 app.use(router);

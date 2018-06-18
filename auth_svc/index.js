@@ -1,12 +1,13 @@
-const express = require("express")
-const expressWinston = require("express-winston")
-const logging = require('../logging')
+const express = require("express");
+const expressWinston = require("express-winston");
+const logging = require('../logging');
+const activities = require('../activities');
 
 const app = express();
 const router = express.Router();
 const logger = logging.TimDebugLogger();
 
-router.use((req, res) => {
+router.use((req, res) => {  
   if (req.header('authorization') === process.env.TOKEN) {
     res.json({
       ok: true
@@ -20,10 +21,17 @@ router.use((req, res) => {
 
 const port = process.env.PORT || 8080
 
+const getRequestIdProperties = (req, _) => {
+  const activityId = activities.getRequestActivityId(req);
+  const requestIdProperties = activityId.addRequestIdProperties({});
+  return requestIdProperties;
+};
+
 app.use(expressWinston.logger({
   winstonInstance: logger,
   level: logging.loggingLevel,
-  colorize: false
+  colorize: false,
+  dynamicMeta: getRequestIdProperties
 }));
 
 app.use(router);

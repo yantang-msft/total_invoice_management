@@ -1,5 +1,5 @@
-const winston = require("winston")
-const winstonEndpoint = require("winston-endpoint")
+const winston = require("winston");
+const JsonLines = require('./jsonLines');
 
 const loggingLevel = 'debug';
 
@@ -17,6 +17,13 @@ function TimDebugLogger() {
     httpTransport()
   ]);
 }
+
+const messageIntoLogRewriter = (level, message, meta) => {
+  return Object.assign({
+    level: level,
+    log: message
+  }, meta);
+};
 
 function logger(transports) {
   let logger = new winston.Logger({
@@ -42,10 +49,10 @@ function consoleTransport() {
 }
 
 function httpTransport() {
-  return new winstonEndpoint({
+  return new JsonLines({
     url: "http://localhost:8887/ApplicationInsightsHttpChannel",
-    json: true,
-    level: loggingLevel
+    level: loggingLevel,
+    rewriter: messageIntoLogRewriter
   });
 }
 

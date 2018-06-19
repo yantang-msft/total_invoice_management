@@ -33,6 +33,8 @@ spec:
         name: {{ $service_name }}
         ports:
         - containerPort: 8080
+        env:
+{{ include "total_invoice.ikey.envvar" $context | indent 8 }}
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---

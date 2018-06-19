@@ -36,6 +36,7 @@ spec:
             secretKeyRef:
               name: total-invoice-secrets
               key: auth_token
+{{ include "total_invoice.ikey.envvar" $context | indent 8 }}
         ports:
         - containerPort: 8080
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}

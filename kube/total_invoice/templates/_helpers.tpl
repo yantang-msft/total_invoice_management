@@ -57,16 +57,21 @@ Define common, Kubernetes-related environment variables
       fieldPath: metadata.uid
 {{- end }}
 
+{{- define "total_invoice.ikey.envvar" -}}
+- name: INSTRUMENTATION_KEY
+  valueFrom:
+    secretKeyRef:
+      name: total-invoice-secrets
+      key: appinsights_instrumentationkey
+{{- end }}
+
 {{- define "total_invoice.fluentdSidecar" -}}
+{{ if ne .Values.log_capture_mode "ai_native" }}
 - name: fluentdsidecar
   image: {{ .Values.fluentdsidecar_image }}
   imagePullPolicy: IfNotPresent
   env:
-    - name: INSTRUMENTATION_KEY
-      valueFrom:
-        secretKeyRef:
-          name: total-invoice-secrets
-          key: appinsights_instrumentationkey
+{{ include "total_invoice.ikey.envvar" . | indent 4 }}
 {{ include "total_invoice.k8s.envvars" . | indent 4 }}
 {{ if eq .Values.log_capture_mode "console" }}
   volumeMounts:
@@ -79,8 +84,10 @@ Define common, Kubernetes-related environment variables
     mountPath: /var/fluentdsidecar
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- define "total_invoice.fluentdConsoleLogVolume" -}}
+{{ if ne .Values.log_capture_mode "ai_native" }}
 - name: varlog
   hostPath:
     path: /var/log
@@ -90,8 +97,10 @@ Define common, Kubernetes-related environment variables
 - name: emptydir
   emptyDir: {}
 {{- end }}
+{{- end }}
 
 {{- define "total_invoice.fluentdAuthorizationAssets" -}}
+{{ if ne .Values.log_capture_mode "ai_native" }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -125,4 +134,5 @@ subjects:
 - kind: ServiceAccount
   name:  {{ .service_name }}
   namespace: {{ .Values.namespace }}
+{{- end }}
 {{- end }}

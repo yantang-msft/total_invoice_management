@@ -5,9 +5,11 @@
 replica_count: 1
 namespace: total-invoice
 
-# If set to "console", the logs will be captured from stdout/stderr
-# instead of assuming that the service will be pushing them using HTTP
-log_capture_mode: http
+# If set to "http", logs will be pushed to fluentd sidecar using JSON lines over HTTP protocol
+# If set to "console", logs will be captured by fluentd sidecar from stdout/stderr
+# If set to "ai_native", fluentd sidecar will not be used at all. The deployment will assume
+# that services are pushing logs to Application Insights directly using AI SDK 
+log_capture_mode: ai_native
 
 # In production environment the auth token should not have a default value
 # (it should be passed via command-line parameter at deployment time)

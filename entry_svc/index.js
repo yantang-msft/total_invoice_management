@@ -1,10 +1,20 @@
+
+const appInsights = require('applicationinsights');
+appInsights.setup(process.env.INSTRUMENTATION_KEY)
+  .setAutoCollectConsole(true)
+  .setAutoCollectDependencies(true)
+  .setAutoCollectExceptions(true)
+  .setAutoCollectRequests(true)
+  .setAutoDependencyCorrelation(true)
+  .setUseDiskRetryCaching(false)
+  .start();
+
 const http = require('http');
 const httpProxy = require('http-proxy');
 const stream_util = require('mississippi');
 const logging = require('../logging');
-const activities = require('../activities');
 
-const logger = logging.TimDebugLogger();
+const logger = logging.TimConsoleLogger();
 
 let ambassadorUrl = process.env.AMBASSADOR_URI;
 if (!ambassadorUrl) {
@@ -17,21 +27,11 @@ else {
     });
 
     proxy.on('proxyReq', (upstreamReq, req, res, options) => {
-        // Disregard Request-Id even if present on client request 
-        // (we do not trust external clients to set request IDs properly)
-        let activityId = new activities.ActivityId();
-        let requestId = activityId.getChildId();
-        upstreamReq.setHeader(activities.RequestIdHeader, requestId);
-
         // Handle timeouts
         upstreamReq.on('abort', () => {
           res.writeHead(502);
           res.end("Upstream request timed out");
         });
-
-        // Also add the activity ID and request ID to the request so we have it when processing the response
-        req.activityId = activityId;
-        req.requestId = requestId;
     });
 
     proxy.on('proxyRes', function (proxyRes, req, res) {
@@ -67,14 +67,14 @@ else {
     });
 
     proxy.on('error', (err, req, res) => {
-        logger.error("ProxyServer: unexpected error when proxying request", {error: err, activityId: req.activityId.id});
+        logger.error("ProxyServer: unexpected error when proxying request", err);
         res.writeHead(500);
         res.end("Unexpected error proxying request");
     });
 
     const server = http.createServer(function(req, res) {
         proxy.web(req, res, { target: ambassadorUrl }, err => {
-            logger.error("ProxyServer.web: unexpected error when proxying request", {error: err, activityId: req.activityId.id});
+            logger.error("ProxyServer.web: unexpected error when proxying request", err);
             res.writeHead(500);
             res.end("Unexpected error proxying request");
         });

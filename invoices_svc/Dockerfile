@@ -3,7 +3,6 @@ WORKDIR /usr/src/app
 
 COPY ./invoices_svc/*.js ./invoices_svc/package.json ./invoices_svc/
 COPY ./logging/*.js ./logging/package.json ./logging/
-COPY ./activities/*.js ./activities/package.json ./activities/
 
 WORKDIR /usr/src/app/invoices_svc
 RUN npm install

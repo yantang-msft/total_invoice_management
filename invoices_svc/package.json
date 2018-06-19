@@ -10,12 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "applicationinsights": "^1.0.3",
     "express": "^4.16.2",
-    "express-winston": "^2.5.1",
+    "logging": "file:../logging",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "winston": "^2.4.2",
-    "logging": "file:../logging",
-    "activities": "file:../activities"
+    "winston": "^2.4.2"
   }
 }

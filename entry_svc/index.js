@@ -34,38 +34,6 @@ else {
         });
     });
 
-    proxy.on('proxyRes', function (proxyRes, req, res) {
-      let bodyHandler = stream_util.concat((data) => {
-        let log = undefined;
-        let message = "";
-
-        if (proxyRes.statusCode < 300) {
-            log = logger.info;
-            message = `entry_svc: request ${req.requestId} was successful`;
-        }
-        else if (proxyRes.statusCode >=400 && proxyRes.statusCode < 500) {
-            log = logger.info;
-            message = `entry_svc: request ${req.requestId} was a failure`;
-        }
-        else if (proxyRes.statusCode >= 500) {
-            log = logger.warn;
-            message = `entry_svc: request ${req.requestId} was a failure`;
-        }
-
-        if (log) {
-          const dataStr = data.toString('utf8');
-          const meta = req.activityId.addRequestIdProperties({
-            statusCode: proxyRes.statusCode,
-            data: dataStr
-          });
-
-          log(message, meta);
-        }
-      });
-      
-      stream_util.pipe(proxyRes, bodyHandler, err => {});
-    });
-
     proxy.on('error', (err, req, res) => {
         logger.error("ProxyServer: unexpected error when proxying request", err);
         res.writeHead(500);

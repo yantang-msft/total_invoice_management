@@ -99,8 +99,7 @@ Define common, Kubernetes-related environment variables
 {{- end }}
 {{- end }}
 
-{{- define "total_invoice.fluentdAuthorizationAssets" -}}
-{{ if ne .Values.log_capture_mode "ai_native" }}
+{{- define "total_invoice.authorizationAssets" -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -134,5 +133,4 @@ subjects:
 - kind: ServiceAccount
   name:  {{ .service_name }}
   namespace: {{ .Values.namespace }}
-{{- end }}
 {{- end }}

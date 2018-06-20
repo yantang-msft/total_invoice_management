@@ -1,7 +1,7 @@
 {{- $service_name := "invoices-svc" }}
 {{- $context := (dict "service_name" $service_name "Values" .Values "Release" .Release) }}
 
-{{ include "total_invoice.fluentdAuthorizationAssets" $context }}
+{{ include "total_invoice.authorizationAssets" $context }}
 
 ---
 apiVersion: apps/v1

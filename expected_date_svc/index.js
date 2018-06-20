@@ -6,8 +6,11 @@ appInsights.setup(process.env.INSTRUMENTATION_KEY)
   .setAutoCollectExceptions(true)
   .setAutoCollectRequests(true)
   .setAutoDependencyCorrelation(true)
-  .setUseDiskRetryCaching(false)
-  .start();
+  .setUseDiskRetryCaching(false);
+const aiContext = appInsights.defaultClient.context;
+aiContext.tags[aiContext.keys.cloudRole] = process.env.SOURCE_CONTAINER_NAME;
+aiContext.tags[aiContext.keys.cloudRoleInstance] = process.env.POD_NAME;
+appInsights.start();
 
 const express = require("express");
 const moment = require("moment");

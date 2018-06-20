@@ -35,6 +35,7 @@ spec:
         - containerPort: 8080
         env:
 {{ include "total_invoice.ikey.envvar" $context | indent 8 }}
+{{ include "total_invoice.k8s.envvars" $context | indent 8 }}
 {{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---

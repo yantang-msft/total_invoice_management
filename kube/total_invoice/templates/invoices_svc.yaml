@@ -34,7 +34,7 @@ spec:
         env:
         - name: EXPECTED_DATE_URI
           value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
-{{ include "total_invoice.ikey.envvar" $context | indent 8 }}
+{{ include "total_invoice.appinsights.envvars" $context | indent 8 }}
 {{ include "total_invoice.k8s.envvars" $context | indent 8 }}
         ports:
         - containerPort: 8080

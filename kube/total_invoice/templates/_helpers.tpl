@@ -57,12 +57,16 @@ Define common, Kubernetes-related environment variables
       fieldPath: metadata.uid
 {{- end }}
 
-{{- define "total_invoice.ikey.envvar" -}}
+{{- define "total_invoice.appinsights.envvars" -}}
 - name: INSTRUMENTATION_KEY
   valueFrom:
     secretKeyRef:
       name: total-invoice-secrets
       key: appinsights_instrumentationkey
+{{ if eq .Values.log_capture_mode "ai_sidecar" }}
+- name: APPLICATIONINSIGHTS_ENDPOINT
+  value: http://localhost:8887/ApplicationInsightsHttpChannel
+{{- end }}
 {{- end }}
 
 {{- define "total_invoice.fluentdSidecar" -}}
@@ -71,7 +75,7 @@ Define common, Kubernetes-related environment variables
   image: {{ .Values.fluentdsidecar_image }}
   imagePullPolicy: IfNotPresent
   env:
-{{ include "total_invoice.ikey.envvar" . | indent 4 }}
+{{ include "total_invoice.appinsights.envvars" . | indent 4 }}
 {{ include "total_invoice.k8s.envvars" . | indent 4 }}
 {{ if eq .Values.log_capture_mode "console" }}
   volumeMounts:

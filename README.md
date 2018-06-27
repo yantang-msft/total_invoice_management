@@ -52,3 +52,6 @@ curl http://<ENTRY SERVICE URL>/invoices/14 -H 'authorization: letmeinpleasekthx
 ```
 helm del --purge total-invoice-rel
 ```
+
+## TODO
+* Use APPINSIGHTS_INSTRUMENTATIONKEY environment variable instead of INSTRUMENTATION_KEY, for consistency with Application Insights SDK

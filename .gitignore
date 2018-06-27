@@ -4,4 +4,5 @@ invoices_svc/node_modules/
 logging/node_modules/
 entry_svc/node_modules/
 activities/node_modules/
+ai_setup/node_modules/
 **/package-lock.json

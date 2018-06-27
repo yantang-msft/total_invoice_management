@@ -13,6 +13,7 @@
     "applicationinsights": "^1.0.3",
     "express": "^4.16.2",
     "logging": "file:../logging",
+    "ai_setup": "file:../ai_setup",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "winston": "^2.4.2"

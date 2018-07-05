@@ -1,7 +1,7 @@
 const appInsights = require('applicationinsights');
 
 function start() {
-  appInsights.setup(process.env.INSTRUMENTATION_KEY)
+  appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
     .setAutoCollectConsole(true)
     .setAutoCollectDependencies(true)
     .setAutoCollectExceptions(true)
@@ -13,8 +13,8 @@ function start() {
   aiContext.tags[aiContext.keys.cloudRole] = process.env.SOURCE_CONTAINER_NAME;
   aiContext.tags[aiContext.keys.cloudRoleInstance] = process.env.POD_NAME;
 
-  if (process.env.APPLICATIONINSIGHTS_ENDPOINT) {
-    appInsights.defaultClient.config.endpointUrl = process.env.APPLICATIONINSIGHTS_ENDPOINT;
+  if (process.env.APPINSIGHTS_ENDPOINT) {
+    appInsights.defaultClient.config.endpointUrl = process.env.APPINSIGHTS_ENDPOINT;
   }
 
   appInsights.start();

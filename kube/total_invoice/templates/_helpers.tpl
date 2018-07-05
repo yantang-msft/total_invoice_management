@@ -58,13 +58,13 @@ Define common, Kubernetes-related environment variables
 {{- end }}
 
 {{- define "total_invoice.appinsights.envvars" -}}
-- name: INSTRUMENTATION_KEY
+- name: APPINSIGHTS_INSTRUMENTATIONKEY
   valueFrom:
     secretKeyRef:
       name: total-invoice-secrets
       key: appinsights_instrumentationkey
 {{ if eq .Values.log_capture_mode "ai_sidecar" }}
-- name: APPLICATIONINSIGHTS_ENDPOINT
+- name: APPINSIGHTS_ENDPOINT
   value: http://localhost:8887/ApplicationInsightsHttpChannel
 {{- end }}
 {{- end }}

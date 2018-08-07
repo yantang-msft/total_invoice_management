@@ -73,7 +73,7 @@ Define common, Kubernetes-related environment variables
 {{ if ne .Values.log_capture_mode "ai_native" }}
 - name: fluentdsidecar
   image: {{ .Values.fluentdsidecar_image }}
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   env:
 {{ include "total_invoice.appinsights.envvars" . | indent 4 }}
 {{ include "total_invoice.k8s.envvars" . | indent 4 }}

@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ $service_name }}
       containers:
       - image: {{ .Values.auth_svc_image }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: {{ $service_name }}
         env:
         - name: TOKEN

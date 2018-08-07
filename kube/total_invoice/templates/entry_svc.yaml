@@ -28,7 +28,7 @@ spec:
       serviceAccountName: {{ $service_name }}
       containers:
       - image: {{ .Values.entry_svc_image }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: {{ $service_name }}
         env:
         - name: AMBASSADOR_URI

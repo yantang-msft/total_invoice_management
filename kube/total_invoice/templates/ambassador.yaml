@@ -65,7 +65,7 @@ spec:
       containers:
       - name: {{ $service_name }}
         image: {{ .Values.ambassador_svc_image }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         resources:
           limits:
             cpu: 1
@@ -92,7 +92,7 @@ spec:
           periodSeconds: 3
       - name: statsd
         image: {{ .Values.ambassador_svc_statsd_image }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       restartPolicy: Always
 
 ---

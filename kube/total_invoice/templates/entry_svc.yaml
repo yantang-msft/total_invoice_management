@@ -33,11 +33,9 @@ spec:
         env:
         - name: AMBASSADOR_URI
           value: http://ambassador-svc.{{ .Values.namespace }}.svc.cluster.local
-{{ include "total_invoice.appinsights.envvars" $context | indent 8 }}
 {{ include "total_invoice.k8s.envvars" $context | indent 8 }}
         ports:
         - containerPort: 8080
-{{ include "total_invoice.fluentdSidecar" $context| indent 6 }}
 
 ---
 apiVersion: v1

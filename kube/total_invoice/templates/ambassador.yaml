@@ -20,6 +20,11 @@ rules:
   resources:
   - secrets
   verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - pods
+  - namespaces
+  verbs: ["get", "list", "watch"]
 
 ---
 apiVersion: v1

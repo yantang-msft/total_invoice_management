@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replica_count: 1
-namespace: total-invoice
+namespace: default
 
 # If set to "http", logs will be pushed to fluentd sidecar using JSON lines over HTTP protocol
 #
@@ -21,10 +21,10 @@ log_capture_mode: ai_sidecar
 # (it should be passed via command-line parameter at deployment time)
 auth_token: letmeinpleasekthxbye
 
-invoices_svc_image: invoices_svc:v1
-expected_date_svc_image: expected_date_svc:v1
-auth_svc_image: auth_svc:v1
-entry_svc_image: entry_svc:v1
+invoices_svc_image: yanmingacr.azurecr.io/invoices_svc
+expected_date_svc_image: yanmingacr.azurecr.io/expected_date_svc
+auth_svc_image: yanmingacr.azurecr.io/auth_svc
+entry_svc_image: yanmingacr.azurecr.io/entry_svc
 ambassador_svc_image: quay.io/datawire/ambassador:0.34.0
 ambassador_svc_statsd_image: quay.io/datawire/statsd:0.34.0
-fluentdsidecar_image: atcdemo.azurecr.io/fluentdsidecar:latest
+fluentdsidecar_image: yanmingacr.azurecr.io/fluentdsidecar:latest

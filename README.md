@@ -2,8 +2,9 @@
 ### *a Kubernetes tutorial*
 
 Original repo accompanies a [blog post](https://medium.com/@MostlyHarmlessD/getting-started-with-microservices-and-kubernetes-76354312b556). 
-This repo contains a modified version that uses Helm for deployment and sends diagnostic data to Application Insights.
-One should create an Application Insights resource and have its instrumentation key ready before attempting to deploy the app.
+This repo contains a modified version that uses Helm for deployment and enabled Application Insights sdk in the projects.
+However no data will be sent to application insights, as the purpose of this demo branch is to have the K8s related configuration injected automatically by the AI [webhook](https://github.com/yantang-msft/kubernetes-appinsights-webhook).
+Current you need to deploy the webhook manually, but finally it will be created automatically when you create the AKS cluster and opt in Application Insights.
 
 ## Configure deployment environment
 
@@ -41,7 +42,7 @@ docker build . -f entry_svc/Dockerfile -t entry_svc:v1
 ## Deploy
 ```
 cd ./kube
-helm install total_invoice --name total-invoice-rel  --set 'appinsights_instrumentationkey=<YOUR APP INSIGHS IKEY>'
+helm install total_invoice --name total-invoice-rel
 ```
 
 NOTICE: Make sure the values are set correctly in values.yaml.  

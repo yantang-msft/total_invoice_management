@@ -8,6 +8,12 @@ Current you need to deploy the webhook manually, but finally it will be created 
 
 ## Configure deployment environment
 
+### Configuration Update
+Places to update to accomodate your own environment
+1) Update the REPO variable in the Makefile
+2) Update the docker images in kube/values.yaml
+
+### Minikube
 If using minikube, switch to the built-in Docker daemon:
 ```
 eval $(minikube docker-env)
@@ -19,6 +25,7 @@ Pull latest fluentd sidecar image for sending logs to Application Insights
 docker pull atcdemo.azurecr.io/fluentdsidecar:latest
 ```
 
+### AKS
 If you are deploying to AKS, it's by default RBAC dsiabled. You can remove all RBAC related settings before deployment.
 If you created an AKS cluster with RBAC enabled, you need to install tiller through from the following command, [here](https://github.com/helm/helm/issues/3460#issuecomment-385992094) is the detailed discusssion. Otherwise, tiller won't be able to talk to the K8s API server.
 ```
@@ -30,14 +37,9 @@ helm init --service-account tiller
 helm ls # does not return an error
 ```
 
-## Build Docker images
+## Build and Push Docker images
 
-```
-docker build . -f invoices_svc/Dockerfile -t invoices_svc
-docker build . -f expected_date_svc/Dockerfile -t expected_date_svc
-docker build . -f auth_svc/Dockerfile -t auth_svc
-docker build . -f entry_svc/Dockerfile -t entry_svc
-```
+Run ```make```
 
 ## Deploy
 ```

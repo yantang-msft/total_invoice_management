@@ -33,10 +33,10 @@ helm ls # does not return an error
 ## Build Docker images
 
 ```
-docker build . -f invoices_svc/Dockerfile -t invoices_svc:v1
-docker build . -f expected_date_svc/Dockerfile -t expected_date_svc:v1
-docker build . -f auth_svc/Dockerfile -t auth_svc:v1
-docker build . -f entry_svc/Dockerfile -t entry_svc:v1
+docker build . -f invoices_svc/Dockerfile -t invoices_svc
+docker build . -f expected_date_svc/Dockerfile -t expected_date_svc
+docker build . -f auth_svc/Dockerfile -t auth_svc
+docker build . -f entry_svc/Dockerfile -t entry_svc
 ```
 
 ## Deploy

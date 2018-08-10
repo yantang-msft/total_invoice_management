@@ -55,11 +55,11 @@ metadata:
       kind:  Module
       name:  authentication
       config:
-        auth_service: {{ $service_name }}:3000
+        auth_service: {{ $service_name }}:80
 spec:
   selector:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
   ports:
-  - port: 3000
+  - port: 80
     name: {{ $service_name }}
     targetPort: 8080

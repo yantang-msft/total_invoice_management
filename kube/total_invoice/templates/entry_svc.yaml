@@ -31,8 +31,10 @@ spec:
         imagePullPolicy: Always
         name: {{ $service_name }}
         env:
-        - name: AMBASSADOR_URI
-          value: http://ambassador-svc.{{ .Values.namespace }}.svc.cluster.local
+        - name: AUTH_URI
+          value: http://auth-svc.{{ .Values.namespace }}.svc.cluster.local
+        - name: INVOICE_URI
+          value: http://invoices-svc.{{ .Values.namespace }}.svc.cluster.local
 {{ include "total_invoice.k8s.envvars" $context | indent 8 }}
         ports:
         - containerPort: 8080

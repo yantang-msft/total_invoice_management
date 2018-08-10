@@ -9,9 +9,10 @@ function start() {
     .setAutoDependencyCorrelation(true)
     .setUseDiskRetryCaching(false);
 
-  const aiContext = appInsights.defaultClient.context;
-  aiContext.tags[aiContext.keys.cloudRole] = process.env.SOURCE_CONTAINER_NAME;
-  aiContext.tags[aiContext.keys.cloudRoleInstance] = process.env.POD_NAME;
+  // The context tag will be set by the forwarder
+  // const aiContext = appInsights.defaultClient.context;
+  // aiContext.tags[aiContext.keys.cloudRole] = process.env.SOURCE_CONTAINER_NAME;
+  // aiContext.tags[aiContext.keys.cloudRoleInstance] = process.env.POD_NAME;
 
   if (process.env.APPINSIGHTS_ENDPOINT) {
     appInsights.defaultClient.config.endpointUrl = process.env.APPINSIGHTS_ENDPOINT;

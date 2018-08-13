@@ -13,6 +13,10 @@ let expectedDateUri = process.env.EXPECTED_DATE_URI;
 if (expectedDateUri && expectedDateUri.endsWith('/')) {
   expectedDateUri = expectedDateUri.substr(0, expectedDateUri.length - 1);
 }
+let auditUri = process.env.AUDIT_URI;
+if (auditUri && auditUri.endsWith('/')) {
+  auditUri = auditUri.substr(0, auditUri.length - 1);
+}
 
 const addExpectedDate = (invoice) => {
     let options = {
@@ -47,6 +51,60 @@ router.get("/api/invoices/:id", (req, res, next) => {
     res.json(invoice);
   }, (error) => {
     next(error);
+  });
+});
+
+router.get("/api/invoices", (req, res, next) => {
+  // This API is impatient and can't wait for more than 2 seconds
+  res.setTimeout(2000);
+
+  let options = {
+    uri: `${auditUri}/api/invoices`,
+    json: true
+  };
+
+  request(options).then((invoices) => {
+    res.json(invoices);
+  });
+});
+
+router.post("/api/invoices/:id", (req, res, next) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    res.status(400).send({error: 'Invoice id is invalid'});
+    return;
+  }
+
+  let options = {
+    method: 'POST',
+    uri: `${auditUri}/api/invoices/${id}`,
+    json: true
+  };
+
+  request(options).then((response) => {
+    res.json(response);
+  }, (err) => {
+    res.status(400).send({error: err});
+  });
+});
+
+router.delete("/api/invoices/:id", (req, res, next) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    res.status(400).send({error: 'Invoice id is invalid'});
+    return;
+  }
+
+  let options = {
+    method: 'DELETE',
+    uri: `${auditUri}/api/invoices/${id}`,
+    json: true
+  };
+
+  request(options).then((response) => {
+    res.json(response);
+  }, (err) => {
+    res.status(400).send({error: err});
   });
 });
 

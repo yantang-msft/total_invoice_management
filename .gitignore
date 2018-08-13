@@ -1,6 +1,7 @@
 auth_svc/node_modules/
 expected_date_svc/node_modules/
 invoices_svc/node_modules/
+audit_svc/node_modules/
 logging/node_modules/
 entry_svc/node_modules/
 activities/node_modules/

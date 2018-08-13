@@ -24,6 +24,7 @@ auth_token: letmeinpleasekthxbye
 invoices_svc_image: yanmingacr.azurecr.io/invoices_svc
 expected_date_svc_image: yanmingacr.azurecr.io/expected_date_svc
 auth_svc_image: yanmingacr.azurecr.io/auth_svc
+audit_svc_image: yanmingacr.azurecr.io/audit_svc
 entry_svc_image: yanmingacr.azurecr.io/entry_svc
 ambassador_svc_image: quay.io/datawire/ambassador:0.34.0
 ambassador_svc_statsd_image: quay.io/datawire/statsd:0.34.0

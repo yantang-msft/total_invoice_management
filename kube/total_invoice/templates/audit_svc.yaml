@@ -1,4 +1,4 @@
-{{- $service_name := "invoices-svc" }}
+{{- $service_name := "audit-svc" }}
 {{- $context := (dict "service_name" $service_name "Values" .Values "Release" .Release) }}
 
 {{ include "total_invoice.authorizationAssets" $context }}
@@ -28,17 +28,13 @@ spec:
     spec:
       serviceAccountName: {{ $service_name }}
       containers:
-      - image: {{ .Values.invoices_svc_image }}
+      - image: {{ .Values.audit_svc_image }}
         imagePullPolicy: Always
         name: {{ $service_name }}
-        env:
-        - name: EXPECTED_DATE_URI
-          value: http://expected-date-svc.{{ .Values.namespace }}.svc.cluster.local
-        - name: AUDIT_URI
-          value: http://audit-svc.{{ .Values.namespace }}.svc.cluster.local
-{{ include "total_invoice.k8s.envvars" $context | indent 8 }}
         ports:
         - containerPort: 8080
+        env:
+{{ include "total_invoice.k8s.envvars" $context | indent 8 }}
 
 ---
 apiVersion: v1
@@ -48,15 +44,6 @@ metadata:
 {{ include "total_invoice.std.labels" $context | indent 4 }}
   name: {{ $service_name }}
   namespace: {{ .Values.namespace }}
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v0
-      kind:  Mapping
-      name:  {{ $service_name }}_mapping
-      prefix: /invoices/
-      rewrite: /api/invoices/
-      service: {{ $service_name }}
 spec:
   ports:
   - port: 80

@@ -38,6 +38,7 @@ const doAuthentication = (req) => {
     });
 }
 
+// TODO: change this to http-proxy so we don't need to manually forward all requests
 router.get("/invoices/:id", (req, res, next) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
@@ -55,6 +56,80 @@ router.get("/invoices/:id", (req, res, next) => {
 
             request(options).then(invoice => {
                 res.json(invoice);
+            });
+        } else {
+            res.status(401).json({message: "Authentication Failed"});
+        }
+    });
+});
+
+router.get("/invoices", (req, res, next) => {
+    doAuthentication(req).then((succeeded) => {
+        if (succeeded) {
+            let options = {
+                uri: `${invoiceUrl}/api/invoices`,
+                json: true,
+                headers: req.headers
+            };
+
+            request(options).then(invoices => {
+                res.json(invoices);
+            }, error => {
+                res.status(400).json({message: error});
+            });
+        } else {
+            res.status(401).json({message: "Authentication Failed"});
+        }
+    });
+});
+
+router.post("/invoices/:id", (req, res, next) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).send({ error: 'Invoice id is invalid' });
+        return;
+    }
+
+    doAuthentication(req).then((succeeded) => {
+        if (succeeded) {
+            let options = {
+                method: "POST",
+                uri: `${invoiceUrl}/api/invoices/${id}`,
+                json: true,
+                headers: req.headers
+            };
+
+            request(options).then(result => {
+                res.json(result);
+            }, error => {
+                res.status(400).json({message: error});
+            });
+        } else {
+            res.status(401).json({message: "Authentication Failed"});
+        }
+    });
+});
+
+router.delete("/invoices/:id", (req, res, next) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        res.status(400).send({ error: 'Invoice id is invalid' });
+        return;
+    }
+
+    doAuthentication(req).then((succeeded) => {
+        if (succeeded) {
+            let options = {
+                method: "DELETE",
+                uri: `${invoiceUrl}/api/invoices/${id}`,
+                json: true,
+                headers: req.headers
+            };
+
+            request(options).then(result => {
+                res.json(result);
+            }, error => {
+                res.status(400).json({message: error});
             });
         } else {
             res.status(401).json({message: "Authentication Failed"});

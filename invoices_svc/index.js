@@ -14,25 +14,22 @@ if (expectedDateUri && expectedDateUri.endsWith('/')) {
   expectedDateUri = expectedDateUri.substr(0, expectedDateUri.length - 1);
 }
 
-const addExpectedDate = async (invoice) => {
-  try {
+const addExpectedDate = (invoice) => {
     let options = {
       uri: `${expectedDateUri}/api/expected-date/${invoice.id}`,
       json: true, // Automatically parses JSON string in the response
       headers: { }
     };
 
-    const { expectedDate } = await request(options);
-    return Object.assign({}, invoice, { expectedDate })
-  } 
-  catch (error) {
-    logger.warn('Failed to add expected date', error);
-
-    return invoice
-  }
+    return request(options).then((expectedDate) => {
+      return Object.assign({}, invoice, expectedDate );
+    }, (error) => {
+      logger.warn('Failed to add expected date', error);
+      return invoice;
+    });
 }
 
-router.get("/api/invoices/:id", async (req, res, next) => {
+router.get("/api/invoices/:id", (req, res, next) => {
 
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
@@ -40,20 +37,17 @@ router.get("/api/invoices/:id", async (req, res, next) => {
     return;
   }
 
-  try {
-    const invoice = await addExpectedDate({
-      id: id,
-      ref: `INV-${id}`,
-      amount: id * 100,
-      balance: (id * 100) - 10,
-      ccy: "GBP"
-    });
-
+  addExpectedDate({
+    id: id,
+    ref: `INV-${id}`,
+    amount: id * 100,
+    balance: (id * 100) - 10,
+    ccy: "GBP"
+  }).then((invoice) => {
     res.json(invoice);
-  } 
-  catch (error) {
+  }, (error) => {
     next(error);
-  }
+  });
 });
 
 const port = process.env.PORT || 8080

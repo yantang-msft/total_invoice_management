@@ -1,17 +1,6 @@
-
-const appInsights = require('applicationinsights');
-appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
-  .setAutoCollectConsole(true)
-  .setAutoCollectDependencies(true)
-  .setAutoCollectExceptions(true)
-  .setAutoCollectRequests(true)
-  .setAutoDependencyCorrelation(true)
-  .setUseDiskRetryCaching(false);
-const aiContext = appInsights.defaultClient.context;
-aiContext.tags[aiContext.keys.cloudRole] = process.env.SOURCE_CONTAINER_NAME;
-aiContext.tags[aiContext.keys.cloudRoleInstance] = process.env.POD_NAME;
+const appInsights = require('../ai_setup');
 appInsights.start();
-  
+
 const express = require("express");
 const logging = require('../logging');
 

@@ -21,50 +21,45 @@ if (!invoiceUrl) {
     process.exitCode = 1;
 }
 
-const doAuthentication = async (req) => {
-    try {
-        console.log(req.headers)
-        let options = {
-            uri: `${authUrl}`,
-            json: true,
-            headers: req.headers
-        };
+const doAuthentication = (req) => {
+    console.log(req.headers)
+    let options = {
+        uri: `${authUrl}`,
+        json: true,
+        headers: req.headers
+    };
 
-        await request(options);
+    return request(options).then((result) => {
+        console.log(result)
         return true;
-    }
-    catch (error) {
-        logger.warn('Failed to do authentication', error);
-
+    }, (err) => {
+        logger.warn('Failed to do authentication', err);
         return false;
-    }
+    });
 }
 
-router.get("/invoices/:id", async (req, res, next) => {
+router.get("/invoices/:id", (req, res, next) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
         res.status(400).send({ error: 'Invoice id is invalid' });
         return;
     }
 
-    if (await doAuthentication(req)) {
-        try {
-            console.log(req.headers)
+    doAuthentication(req).then((succeeded) => {
+        if (succeeded) {
             let options = {
                 uri: `${invoiceUrl}/api/invoices/${id}`,
                 json: true,
                 headers: req.headers
             };
 
-            let invoice = await request(options);
-            res.json(invoice);
+            request(options).then(invoice => {
+                res.json(invoice);
+            });
+        } else {
+            res.status(401).json({message: "Authentication Failed"});
         }
-        catch (error) {
-            request.status(500).json({message: error});
-        }
-    } else {
-        res.status(401).json({message: "Authentication Failed"});
-    }
+    });
 });
 
 const port = process.env.PORT || 8080
